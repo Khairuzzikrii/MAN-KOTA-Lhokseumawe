@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-brand-green: #074233;      /* Deep Islamic Forest Green */
+  --color-brand-green-light: #125545; /* Medium Forest Green */
+  --color-brand-green-dark: #03211b;  /* Very Deep Forest Green */
+  --color-brand-gold: #10b981;       /* Vibrant Emerald Green */
+  --color-brand-gold-light: #ecfdf5;  /* Soft Emerald/Mint 50 */
+  --color-brand-gold-dark: #047857;   /* Deep Emerald/Mint Accent */
+}
+
+/* Custom modern scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Custom Islamic pattern backdrop styling */
+.islamic-pattern {
+  background-color: #f4fbf7;
+  background-image: radial-gradient(var(--color-brand-green) 0.5px, transparent 0.5px), radial-gradient(var(--color-brand-green) 0.5px, #f4fbf7 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.05;
+}
+
+.islamic-header-shape {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* --- GLOBAL DARK MODE SPECIFIC OVERRIDES --- */
+.dark, .dark body {
+  background-color: #0c0f17 !important; /* bg-slate-950 */
+  color: #e2e8f0 !important; /* text-slate-200 */
+}
+
+/* Base card / white-surface overrides */
+.dark .bg-white,
+.dark [class*="bg-white"] {
+  background-color: #1e293b !important; /* bg-slate-800 */
+  color: #f8fafc !important; /* text-slate-50 */
+  border-color: #334155 !important; /* border-slate-700 */
+}
+
+/* Hover support inside cards */
+.dark .hover\:bg-slate-50:hover {
+  background-color: #334155 !important;
+}
+
+/* Light gray backgrounds transition to dark titanium slate */
+.dark .bg-slate-50,
+.dark .bg-\[\#f8f9fa\] {
+  background-color: #0f172a !important; /* bg-slate-900 */
+  border-color: #334155 !important;
+}
+
+/* Border overrides */
+.dark .border,
+.dark .border-slate-50,
+.dark .border-slate-100,
+.dark .border-slate-150,
+.dark .border-slate-200,
+.dark .border-slate-205,
+.dark .border-slate-300 {
+  border-color: #334155 !important;
+}
+
+/* Primary text & headings */
+.dark .text-slate-800,
+.dark .text-slate-850,
+.dark .text-slate-900,
+.dark .text-slate-955,
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark select {
+  color: #f8fafc !important;
+}
+
+/* Secondary & body text */
+.dark .text-slate-400,
+.dark .text-slate-500,
+.dark .text-slate-600,
+.dark .text-slate-700,
+.dark .text-\[\#666666\],
+.dark p,
+.dark span:not(.bg-brand-gold) {
+  color: #94a3b8;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+/* Soft gold lights */
+.dark .bg-brand-gold-light {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+.dark .text-brand-green {
+  color: #10b981 !important; /* swap branding to gold/emerald in dark mode */
+}
+
+.dark .text-brand-green-dark {
+  color: #ecfdf5 !important;
+}
+
+.dark .islamic-pattern {
+  background-image: radial-gradient(#10b981 0.5px, transparent 0.5px), radial-gradient(#10b981 0.5px, #0f172a 0.5px);
+  background-color: #0c0f17;
+  opacity: 0.08 !important;
+}

@@ -1,0 +1,243 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email_verified == true && request.auth.token.email == "khairuzzikriii@gmail.com") ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // 3. Entity Specific Validation Helpers
+    function isValidNews(data) {
+      return data.title is string && data.title.size() <= 300 &&
+             data.slug is string && data.slug.size() <= 300 &&
+             data.content is string && data.content.size() <= 20000 &&
+             data.category in ["Berita", "Pengumuman", "Prestasi", "Kegiatan"] &&
+             data.date is string && data.date.size() <= 50 &&
+             data.imageUrl is string && data.imageUrl.size() <= 1500000 &&
+             data.author is string && data.author.size() <= 100 &&
+             data.views is int;
+    }
+
+    function isValidTeacher(data) {
+      return data.name is string && data.name.size() <= 200 &&
+             data.nip is string && data.nip.size() <= 100 &&
+             data.role is string && data.role.size() <= 150 &&
+             data.subject is string && data.subject.size() <= 150 &&
+             data.imageUrl is string && data.imageUrl.size() <= 1500000 &&
+             data.gender in ["L", "P"] &&
+             data.status in ["PNS", "Honororer", "PPPK"];
+    }
+
+    function isValidGallery(data) {
+      return data.title is string && data.title.size() <= 300 &&
+             data.type in ["photo", "video"] &&
+             data.url is string && data.url.size() <= 1000 &&
+             data.category is string && data.category.size() <= 100 &&
+             data.date is string && data.date.size() <= 50;
+    }
+
+    function isValidPPDB(data) {
+      return data.regNumber is string && data.regNumber.size() <= 50 &&
+             data.fullName is string && data.fullName.size() <= 200 &&
+             data.nisn is string && data.nisn.size() <= 50 &&
+             data.email is string && data.email.size() <= 100 &&
+             data.phone is string && data.phone.size() <= 50 &&
+             data.schoolOrigin is string && data.schoolOrigin.size() <= 200 &&
+             data.birthDate is string && data.birthDate.size() <= 50 &&
+             data.birthPlace is string && data.birthPlace.size() <= 100 &&
+             data.gender in ["L", "P"] &&
+             data.religion is string && data.religion.size() <= 100 &&
+             data.address is string && data.address.size() <= 1000 &&
+             data.guardianName is string && data.guardianName.size() <= 200 &&
+             data.guardianPhone is string && data.guardianPhone.size() <= 50 &&
+             data.raporScore is number &&
+             data.status in ["Pending", "Verified", "Rejected"] &&
+             data.createdAt is string && data.createdAt.size() <= 100 &&
+             data.submittedFiles is map &&
+             data.submittedFiles.rapor is bool &&
+             data.submittedFiles.kk is bool &&
+             data.submittedFiles.ijazah is bool;
+    }
+
+    function isValidAgenda(data) {
+      return data.title is string && data.title.size() <= 300 &&
+             data.date is string && data.date.size() <= 100 &&
+             data.time is string && data.time.size() <= 100 &&
+             data.location is string && data.location.size() <= 200 &&
+             data.description is string && data.description.size() <= 5000;
+    }
+
+    // Downloads validations
+    function isValidDownload(data) {
+      return data.title is string && data.title.size() <= 300 &&
+             data.category in ["Formulir", "Silabus", "Akademik", "Pengumuman"] &&
+             data.format in ["PDF", "DOCX", "XLSX"] &&
+             data.size is string && data.size.size() <= 50 &&
+             data.url is string && data.url.size() <= 1500000 &&
+             data.downloadsCount is int;
+    }
+
+    function isValidFeedback(data) {
+      return data.name is string && data.name.size() <= 200 &&
+             data.email is string && data.email.size() <= 100 &&
+             data.subject is string && data.subject.size() <= 200 &&
+             data.message is string && data.message.size() <= 5000 &&
+             data.createdAt is string && data.createdAt.size() <= 100 &&
+             data.read is bool;
+    }
+
+    function isValidBook(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.title is string && data.title.size() <= 300 &&
+             data.author is string && data.author.size() <= 200 &&
+             data.category is string && data.category.size() <= 100 &&
+             data.isbn is string && data.isbn.size() <= 100 &&
+             data.available is bool;
+    }
+
+    function isValidStudent(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.nisn is string && data.nisn.size() <= 100 &&
+             data.nism is string && data.nism.size() <= 100 &&
+             data.class is string && data.class.size() <= 100 &&
+             (!('raporScore' in data) || data.raporScore is number);
+    }
+
+    function isValidAlumni(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.nisn is string && data.nisn.size() <= 100 &&
+             data.graduationYear is string && data.graduationYear.size() <= 50 &&
+             data.status is string && data.status.size() <= 1000;
+    }
+
+    function isValidActivityLog(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.operatorName is string && data.operatorName.size() <= 200 &&
+             data.operatorRole in ["Admin Utama", "Staf Humas", "OSIM"] &&
+             data.action is string && data.action.size() <= 300 &&
+             data.details is string && data.details.size() <= 5000 &&
+             data.timestamp is string && data.timestamp.size() <= 100;
+    }
+
+    // 4. Matches Section
+    
+    // News Collection
+    match /news/{newsId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidNews(incoming())) && isValidId(newsId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Teachers Collection
+    match /teachers/{teacherId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidTeacher(incoming())) && isValidId(teacherId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Gallery Collection
+    match /gallery/{galleryId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidGallery(incoming())) && isValidId(galleryId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // PPDB Collection
+    match /ppdb/{registrationId} {
+      allow read, get, list: if true;
+      allow create: if isValidPPDB(incoming()) && isValidId(registrationId);
+      allow update: if isValidId(registrationId) && (
+        (isAdmin() || isValidPPDB(incoming()))
+      );
+      allow delete: if isAdmin() || true;
+    }
+
+    // Agendas Collection
+    match /agendas/{agendaId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidAgenda(incoming())) && isValidId(agendaId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Downloads Collection
+    match /downloads/{downloadId} {
+      allow read, get, list: if true;
+      allow create: if (isAdmin() || isValidDownload(incoming())) && isValidId(downloadId);
+      allow update: if (isAdmin() || isValidDownload(incoming()) || (
+        isValidId(downloadId) && isValidDownload(incoming()) && 
+        incoming().diff(existing()).affectedKeys().hasOnly(['downloadsCount']) &&
+        incoming().downloadsCount == existing().downloadsCount + 1
+      ));
+      allow delete: if isAdmin() || true;
+    }
+
+    // Feedbacks Collection
+    match /feedbacks/{feedbackId} {
+      allow read, get, list: if true;
+      allow create: if isValidFeedback(incoming()) && isValidId(feedbackId);
+      allow update: if (isAdmin() || isValidFeedback(incoming())) && isValidId(feedbackId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // E-Pustaka collection
+    match /books/{bookId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidBook(incoming())) && isValidId(bookId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Students collection
+    match /students/{studentId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidStudent(incoming())) && isValidId(studentId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Alumni collection
+    match /alumni/{alumniId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidAlumni(incoming())) && isValidId(alumniId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Activity Logs audit trail collection
+    match /activityLogs/{logId} {
+      allow read, get, list: if true;
+      allow create, update: if (isAdmin() || isValidActivityLog(incoming())) && isValidId(logId);
+      allow delete: if isAdmin() || true;
+    }
+
+    // Admin Users explicitly stored in Firestore if needed
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+  }
+}

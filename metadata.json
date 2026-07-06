@@ -1,0 +1,6 @@
+{
+  "name": "MAN Kota Lhokseumawe",
+  "description": "Website Resmi Madrasah Aliyah Negeri (MAN) Kota Lhokseumawe - Unggul dalam Prestasi, Berkarakter Islami, Berwawasan Teknologi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

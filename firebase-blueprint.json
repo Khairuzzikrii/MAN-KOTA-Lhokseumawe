@@ -1,0 +1,242 @@
+{
+  "entities": {
+    "NewsItem": {
+      "title": "NewsItem",
+      "description": "School news and announcements content",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string", "enum": ["Berita", "Pengumuman", "Prestasi", "Kegiatan"] },
+        "date": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "author": { "type": "string" },
+        "views": { "type": "integer" }
+      },
+      "required": ["title", "slug", "content", "category", "date", "imageUrl", "author", "views"]
+    },
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Teacher profile record",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "nip": { "type": "string" },
+        "role": { "type": "string" },
+        "subject": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "gender": { "type": "string", "enum": ["L", "P"] },
+        "status": { "type": "string", "enum": ["PNS", "Honororer", "PPPK"] }
+      },
+      "required": ["name", "nip", "role", "subject", "imageUrl", "gender", "status"]
+    },
+    "GalleryItem": {
+      "title": "GalleryItem",
+      "description": "Media item in school gallery catalog",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["photo", "video"] },
+        "url": { "type": "string" },
+        "category": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["title", "type", "url", "category", "date"]
+    },
+    "PPDBRegistration": {
+      "title": "PPDBRegistration",
+      "description": "Registration for prospective new students",
+      "type": "object",
+      "properties": {
+        "regNumber": { "type": "string" },
+        "fullName": { "type": "string" },
+        "nisn": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "schoolOrigin": { "type": "string" },
+        "birthDate": { "type": "string" },
+        "birthPlace": { "type": "string" },
+        "gender": { "type": "string", "enum": ["L", "P"] },
+        "religion": { "type": "string" },
+        "address": { "type": "string" },
+        "guardianName": { "type": "string" },
+        "guardianPhone": { "type": "string" },
+        "raporScore": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "Verified", "Rejected"] },
+        "createdAt": { "type": "string" },
+        "submittedFiles": {
+          "type": "object",
+          "properties": {
+            "rapor": { "type": "boolean" },
+            "kk": { "type": "boolean" },
+            "ijazah": { "type": "boolean" }
+          },
+          "required": ["rapor", "kk", "ijazah"]
+        }
+      },
+      "required": [
+        "regNumber",
+        "fullName",
+        "nisn",
+        "email",
+        "phone",
+        "schoolOrigin",
+        "birthDate",
+        "birthPlace",
+        "gender",
+        "religion",
+        "address",
+        "guardianName",
+        "guardianPhone",
+        "raporScore",
+        "status",
+        "createdAt",
+        "submittedFiles"
+      ]
+    },
+    "AcademicAgenda": {
+      "title": "AcademicAgenda",
+      "description": "School scheduled event or agenda",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["title", "date", "time", "location", "description"]
+    },
+    "DownloadFile": {
+      "title": "DownloadFile",
+      "description": "Catalog of school documents and downloadable forms",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "category": { "type": "string", "enum": ["Formulir", "Silabus", "Akademik", "Pengumuman"] },
+        "format": { "type": "string", "enum": ["PDF", "DOCX", "XLSX"] },
+        "size": { "type": "string" },
+        "url": { "type": "string" },
+        "downloadsCount": { "type": "integer" }
+      },
+      "required": ["title", "category", "format", "size", "url", "downloadsCount"]
+    },
+    "MessageFeedback": {
+      "title": "MessageFeedback",
+      "description": "Feedback message from contact page",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["name", "email", "subject", "message", "createdAt", "read"]
+    },
+    "Book": {
+      "title": "Book",
+      "description": "Library books / E-Pustaka catalog",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "category": { "type": "string" },
+        "isbn": { "type": "string" },
+        "available": { "type": "boolean" },
+        "coverUrl": { "type": "string" }
+      },
+      "required": ["title", "author", "category", "isbn", "available"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student academic profile database",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "nisn": { "type": "string" },
+        "nism": { "type": "string" },
+        "class": { "type": "string" },
+        "gender": { "type": "string", "enum": ["L", "P"] },
+        "phone": { "type": "string" },
+        "graduationStatus": { "type": "string" },
+        "raporScore": { "type": "number" }
+      },
+      "required": ["name", "nisn"]
+    },
+    "Alumni": {
+      "title": "Alumni",
+      "description": "School graduated alumni list",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "nisn": { "type": "string" },
+        "graduationYear": { "type": "string" },
+        "status": { "type": "string" },
+        "gender": { "type": "string", "enum": ["L", "P"] }
+      },
+      "required": ["name", "nisn", "graduationYear", "status"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "System transaction log for administrative audit trail",
+      "type": "object",
+      "properties": {
+        "operatorName": { "type": "string" },
+        "operatorRole": { "type": "string", "enum": ["Admin Utama", "Staf Humas", "OSIM"] },
+        "action": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "details": { "type": "string" }
+      },
+      "required": ["operatorName", "operatorRole", "action", "timestamp", "details"]
+    }
+  },
+  "firestore": {
+    "/news/{newsId}": {
+      "schema": "NewsItem",
+      "description": "News and announcements articles collection"
+    },
+    "/teachers/{teacherId}": {
+      "schema": "Teacher",
+      "description": "All teacher listing documents"
+    },
+    "/gallery/{galleryId}": {
+      "schema": "GalleryItem",
+      "description": "Catalog of photos/videos from events"
+    },
+    "/ppdb/{registrationId}": {
+      "schema": "PPDBRegistration",
+      "description": "Submitted expressions of interest / enrollment applications"
+    },
+    "/agendas/{agendaId}": {
+      "schema": "AcademicAgenda",
+      "description": "Scheduled events, timetables, active agendas"
+    },
+    "/downloads/{downloadId}": {
+      "schema": "DownloadFile",
+      "description": "Downloadable file records and tracking counts"
+    },
+    "/feedbacks/{feedbackId}": {
+      "schema": "MessageFeedback",
+      "description": "Customer/parent feedback messages"
+    },
+    "/books/{bookId}": {
+      "schema": "Book",
+      "description": "E-Pustaka digital books collection"
+    },
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Registered active and graduate students list"
+    },
+    "/alumni/{alumniId}": {
+      "schema": "Alumni",
+      "description": "Registered alumni data catalog"
+    },
+    "/activityLogs/{logId}": {
+      "schema": "ActivityLog",
+      "description": "System log of admin actions"
+    }
+  }
+}
